@@ -1,0 +1,236 @@
+For R1
+********************************
+!!!AUTHORIZED ACCESS ONLY!!!
+********************************
+User Access Verification
+Password:
+R1>en
+Password:
+R1#configure terminal
+Enter configuration commands, one per line. End with CNTL/Z.
+
+
+
+
+        
+R1(config)#exit
+R1#
+%SYS-5-CONFIG_I: Configured from console by console
+R1#ping 192.168.2.2
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.2.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 25/30/44 ms
+R1#show running-config
+Building configuration...
+Current configuration : 930 bytes
+!
+version 12.3
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R1
+!
+!
+!
+enable secret 5 $1$mERr$9cTjUIEqNGurQiFU.ZeCi1
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+
+
+R1#show ip route
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+* - candidate default, U - per-user static route, o - ODR
+P - periodic downloaded static route
+Gateway of last resort is not set
+C 192.168.1.0/24 is directly connected, FastEthernet0/0
+C 192.168.2.0/24 is directly connected, Serial0/0/0
+R1#show ip route
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+* - candidate default, U - per-user static route, o - ODR
+P - periodic downloaded static route
+Gateway of last resort is not set
+C 192.168.1.0/24 is directly connected, FastEthernet0/0
+C 192.168.2.0/24 is directly connected, Serial0/0/0
+R1#show ip interface brief
+Interface IP-Address OK? Method Status Protocol
+FastEthernet0/0 192.168.1.1 YES manual up up
+FastEthernet0/1 unassigned YES unset administratively down down
+Serial0/0/0 192.168.2.1 YES manual up up
+Serial0/0/1 unassigned YES unset administratively down down
+Vlan1 unassigned YES unset administratively down down
+For R2
+
+Press RETURN to get started!
+
+
+
+Router>enable
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname R2
+R2(config)#no ip domain-lookup
+R2(config)#banner motd #warning#
+R2(config)#line console 0
+R2(config-line)#password cisco
+R2(config-line)#login
+R2(config-line)#line vty 0 15
+R2(config-line)#password cisco
+R2(config-line)#login
+R2(config-line)#exit
+R2(config)#enable secret class
+R2(config)#int s0/0/0
+R2(config-if)#exit
+R2(config)#int s0/0/0
+R2(config-if)#ip address 192.168.2.2
+R2(config-if)#ip address 192.168.2.2 255.255.255.0 
+R2(config-if)#no shutdown
+
+R2(config-if)#
+%LINK-5-CHANGED: Interface Serial0/0/0, changed state to up
+
+R2(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Serial0/0/0, changed state to up
+
+R2(config-if)#int f0/0
+R2(config-if)#ip address 192.168.3.1
+R2(config-if)#ip address 192.168.3.1 255.255.255.0
+R2(config-if)#no shutdown
+
+R2(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+R2(config-if)#exit
+R2(config)#end
+R2#
+%SYS-5-CONFIG_I: Configured from console by console
+
+R2#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+R2#show ip route
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+C    192.168.2.0/24 is directly connected, Serial0/0/0
+C    192.168.3.0/24 is directly connected, FastEthernet0/0
+
+R2#show ip int brief
+Interface              IP-Address      OK? Method Status                Protocol 
+FastEthernet0/0        192.168.3.1     YES manual up                    up 
+FastEthernet0/1        unassigned      YES unset  administratively down down 
+Serial0/0/0            192.168.2.2     YES manual up                    up 
+Serial0/0/1            unassigned      YES unset  administratively down down 
+Vlan1                  unassigned      YES unset  administratively down down
+R2#ping 192.168.2.1
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.2.1, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 7/14/20 ms
+
+R2#
+
+
+
+
+
+
+
+
+R2 con0 is now available
+
+********************************
+!!!AUTHORIZED ACCESS ONLY!!!
+********************************
+User Access Verification
+Password:
+R2>en
+Password:
+R2#configure terminal
+Enter configuration commands, one per line. End with CNTL/Z.
+
+
+
+
+        
+R2(config)#exit
+R2#
+%SYS-5-CONFIG_I: Configured from console by console
+R2#ping 192.168.2.2
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.2.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 4/10/33 ms
+R2#ping 192.168.2.1
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.2.1, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/4/18 ms
+R2#show running-config
+Building configuration...
+Current configuration : 913 bytes
+!
+version 12.3
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R2
+!
+!
+!
+enable secret 5 $1$mERr$9cTjUIEqNGurQiFU.ZeCi1
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+R2#show ip route
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+* - candidate default, U - per-user static route, o - ODR
+P - periodic downloaded static route
+Gateway of last resort is not set
+C 192.168.2.0/24 is directly connected, Serial0/0/0
+C 192.168.3.0/24 is directly connected, FastEthernet0/0
+R2#show ip interface brief
+Interface IP-Address OK? Method Status Protocol
+FastEthernet0/0 192.168.3.1 YES manual up up
+FastEthernet0/1 unassigned YES unset administratively down down
+Serial0/0/0 192.168.2.2 YES manual up up
+Serial0/0/1 unassigned YES unset administratively down down
+Vlan1 unassigned YES unset administratively down down
